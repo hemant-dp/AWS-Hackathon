@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Architect | Serverless System Design</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: #e2e8f0;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-field {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.3);
+            outline: none;
+        }
+
+        .btn-glow {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-glow:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Security Button Style */
+        .btn-security {
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-security:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        
+        <header class="mb-10 text-center">
+            <div class="inline-block p-2 mb-4 rounded-full bg-indigo-900/30 border border-indigo-500/30">
+                <span class="text-indigo-400 text-xs font-bold tracking-widest uppercase px-2">AI DevOps Agent V2.3</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 mb-4 drop-shadow-lg">
+                Serverless Architect
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+                Design, Code, Cost, and <span class="text-red-400 font-bold">Secure</span> your AWS infrastructure.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="lg:col-span-4 space-y-6">
+                
+                <div class="glass-panel rounded-2xl p-6">
+                    <h2 class="text-xl font-semibold mb-6 flex items-center gap-2 text-white">
+                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Configuration
+                    </h2>
+
+                    <div class="mb-5">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">AI Platform</label>
+                        <div class="relative">
+                            <select id="apiPlatform" onchange="updateUI()" class="input-field w-full rounded-lg p-3 text-sm text-white appearance-none cursor-pointer">
+                                <option value="gemini">Google Gemini (Direct - Stable)</option>
+                                <option value="openrouter" selected>OpenRouter AI (Aggregator)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-indigo-400">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">AI Model</label>
+                        <div class="relative">
+                            <select id="geminiModel" class="hidden input-field w-full rounded-lg p-3 text-sm text-white appearance-none cursor-pointer">
+                                <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (Best & Free)</option>
+                                <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro (Smartest)</option>
+                                <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental)</option>
+                            </select>
+
+                            <select id="openRouterModel" class="input-field w-full rounded-lg p-3 text-sm text-white appearance-none cursor-pointer">
+                                <optgroup label="🚀 Recommended (Free)">
+                                    <option value="x-ai/grok-4.1-fast:free" selected>Grok 4.1 Fast (FREE)</option>
+                                    <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B (FREE)</option>
+                                </optgroup>
+                                <optgroup label="🧠 Reasoning / Experimental">
+                                    <option value="deepseek/deepseek-r1:free">DeepSeek R1 (Thinking)</option>
+                                    <option value="google/gemini-2.0-flash-exp:free">Gemini 2.0 Flash (FREE)</option>
+                                </optgroup>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-indigo-400">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">API Key</label>
+                        <input type="password" id="apiKey" placeholder="sk-or-..." class="input-field w-full rounded-lg p-3 text-sm text-white placeholder-slate-600">
+                    </div>
+                    <p id="keyHelp" class="text-xs text-slate-500 text-right">Get key from <a href="https://openrouter.ai/keys" target="_blank" class="text-indigo-400 hover:text-indigo-300 transition">openrouter.ai</a></p>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2 text-white">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        Prompt
+                    </h2>
+                    <textarea id="userRequirement" rows="6" class="input-field w-full rounded-lg p-4 text-sm text-slate-200 placeholder-slate-600 resize-none" placeholder="Describe your system...&#10;Example: Build a serverless image processing pipeline where users upload to S3, triggering a Lambda to resize images and store metadata in DynamoDB."></textarea>
+                    
+                    <button id="generateBtn" onclick="generateDesignAndCode()" class="btn-glow w-full mt-6 py-4 rounded-xl text-white font-bold text-lg tracking-wide flex items-center justify-center gap-3">
+                        <span id="btnText">GENERATE ARCHITECTURE</span>
+                        <div id="spinner" class="loader hidden"></div>
+                    </button>
+                </div>
+
+                <div id="errorBox" class="hidden glass-panel border-l-4 border-red-500 p-4 rounded-r-lg bg-red-900/20">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-400">Generation Error</h3>
+                            <div id="errorMessage" class="mt-1 text-sm text-red-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:col-span-8 space-y-6 hidden" id="outputContainer">
+                
+                <div class="glass-panel rounded-2xl p-1 overflow-hidden">
+                    <div class="bg-slate-900/50 p-4 border-b border-slate-700 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                            Visual Architecture
+                        </h3>
+                        <span class="text-xs text-slate-500 font-mono">MERMAID.JS RENDER</span>
+                    </div>
+                    <div class="p-6 bg-white/95"> <div id="mermaidDiagram" class="overflow-x-auto flex justify-center min-h-[150px]"></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-1 overflow-hidden">
+                    <div class="bg-slate-900/50 p-4 border-b border-slate-700 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                            💰 Estimated Monthly Cost
+                        </h3>
+                        <span class="text-xs text-yellow-500 font-mono font-bold border border-yellow-500 px-2 rounded">HACKATHON SPECIAL</span>
+                    </div>
+                    <div class="p-6 bg-[#0f172a]">
+                        <div id="costContainer" class="prose prose-invert max-w-none text-sm text-slate-300">
+                            <p class="text-slate-500 italic animate-pulse">Waiting for architecture to calculate costs...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-1 overflow-hidden">
+                    <div class="bg-slate-900/50 p-4 border-b border-slate-700 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                            AWS CDK Code (Python)
+                        </h3>
+                        <button onclick="copyCode()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded transition">
+                            Copy Code
+                        </button>
+                    </div>
+                    <div class="p-0">
+                        <div class="bg-[#0d1117] p-6 overflow-auto max-h-[600px]">
+                            <pre id="cdkCode" class="code-font text-blue-300 text-sm leading-relaxed"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-1 overflow-hidden border border-red-900/30">
+                    <div class="bg-slate-900/50 p-4 border-b border-slate-700 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                            🛡️ Security Audit Report
+                        </h3>
+                        <button id="auditBtn" onclick="runSecurityAudit()" class="text-xs btn-security text-white px-4 py-1.5 rounded font-bold tracking-wide flex items-center gap-2">
+                            <span>RUN AUDIT</span>
+                        </button>
+                    </div>
+                    <div class="p-6 bg-[#0f172a]">
+                        <div id="securityContainer" class="text-sm text-slate-300">
+                            <p class="text-slate-500 italic">Click 'Run Audit' to scan the generated code for vulnerabilities...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-1 overflow-hidden">
+                    <div class="bg-slate-900/50 p-4 border-b border-slate-700">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                            System Specification (JSON)
+                        </h3>
+                    </div>
+                    <div class="p-0">
+                        <div class="bg-[#0d1117] p-4 overflow-auto max-h-48">
+                            <pre id="designJson" class="code-font text-green-400 text-xs"></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: false, 
+            theme: 'base',
+            securityLevel: 'loose',
+            suppressErrorRendering: true,
+            themeVariables: { primaryColor: '#e0e7ff', edgeLabelBackground: '#ffffff', tertiaryColor: '#f1f5f9' }
+        });
+
+        function updateUI() {
+            const platform = document.getElementById('apiPlatform').value;
+            const geminiSelect = document.getElementById('geminiModel');
+            const openRouterSelect = document.getElementById('openRouterModel');
+            const keyHelp = document.getElementById('keyHelp');
+            const apiKey = document.getElementById('apiKey');
+
+            if(platform === 'gemini') {
+                geminiSelect.classList.remove('hidden');
+                openRouterSelect.classList.add('hidden');
+                apiKey.placeholder = "AIza...";
+                keyHelp.innerHTML = "Key from <a href='https://aistudio.google.com/' target='_blank' class='text-indigo-400 underline'>Google AI Studio</a>";
+            } else {
+                geminiSelect.classList.add('hidden');
+                openRouterSelect.classList.remove('hidden');
+                apiKey.placeholder = "sk-or-...";
+                keyHelp.innerHTML = "Key from <a href='https://openrouter.ai/keys' target='_blank' class='text-indigo-400 underline'>openrouter.ai</a>";
+            }
+        }
+
+        async function generateDesignAndCode() {
+            const platform = document.getElementById('apiPlatform').value;
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const userReq = document.getElementById('userRequirement').value.trim();
+            const model = platform === 'gemini' ? document.getElementById('geminiModel').value : document.getElementById('openRouterModel').value;
+
+            const btn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            const errorBox = document.getElementById('errorBox');
+            const outputContainer = document.getElementById('outputContainer');
+            const costContainer = document.getElementById('costContainer');
+            const securityContainer = document.getElementById('securityContainer');
+
+            errorBox.classList.add('hidden');
+            outputContainer.classList.add('hidden');
+            costContainer.innerHTML = '<p class="text-slate-500 italic animate-pulse">Waiting for architecture to calculate costs...</p>';
+            securityContainer.innerHTML = '<p class="text-slate-500 italic">Click \'Run Audit\' to scan the generated code for vulnerabilities...</p>';
+
+            if (!apiKey) { showError("API Key is missing."); return; }
+            if (!userReq) { showError("Please enter a system requirement."); return; }
+
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            btnText.textContent = "ARCHITECTING...";
+
+            try {
+                // 1. Design Architecture
+                const designJson = await callAI(platform, model, apiKey, userReq, 'design');
+                
+                try { await renderDiagram(designJson.mermaidGraphDefinition); } catch (e) { console.warn("Diagram skipped"); }
+                document.getElementById('designJson').textContent = JSON.stringify(designJson, null, 2);
+                
+                outputContainer.classList.remove('hidden');
+                outputContainer.scrollIntoView({ behavior: 'smooth' });
+
+                // 2. Cost Estimation
+                btnText.textContent = "CALCULATING COSTS...";
+                const costHtml = await callAI(platform, model, apiKey, JSON.stringify(designJson), 'cost');
+                costContainer.innerHTML = costHtml;
+
+                // 3. Generate Code
+                btnText.textContent = "WRITING CODE...";
+                const code = await callAI(platform, model, apiKey, JSON.stringify(designJson), 'code');
+                document.getElementById('cdkCode').textContent = code;
+
+            } catch (e) {
+                showError(e.message);
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+                btnText.textContent = "GENERATE ARCHITECTURE";
+            }
+        }
+
+        // --- NEW SECURITY AUDIT FUNCTION ---
+        async function runSecurityAudit() {
+            const platform = document.getElementById('apiPlatform').value;
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const model = platform === 'gemini' ? document.getElementById('geminiModel').value : document.getElementById('openRouterModel').value;
+            const code = document.getElementById('cdkCode').textContent;
+            
+            const securityContainer = document.getElementById('securityContainer');
+            const auditBtn = document.getElementById('auditBtn');
+
+            if (!code) { alert("Generate code first!"); return; }
+
+            auditBtn.disabled = true;
+            auditBtn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Scanning...';
+            
+            try {
+                const auditHtml = await callAI(platform, model, apiKey, code, 'security');
+                securityContainer.innerHTML = auditHtml;
+            } catch(e) {
+                securityContainer.innerHTML = `<p class="text-red-400">Audit Failed: ${e.message}</p>`;
+            } finally {
+                auditBtn.disabled = false;
+                auditBtn.innerHTML = '<span>RE-SCAN</span>';
+            }
+        }
+
+        async function callAI(platform, model, apiKey, input, mode) {
+            let systemPrompt = "";
+            let isJson = false;
+
+            if (mode === 'design') {
+                isJson = true;
+                systemPrompt = `You are a System Architect. Create a serverless architecture. 
+                   CRITICAL: Return ONLY valid JSON with this structure:
+                   { 
+                     "mermaidGraphDefinition": "graph TD...", 
+                     "primaryServices": ["Lambda", "DynamoDB"...], 
+                     "highLevelDescription": "..." 
+                   }
+                   Keep Mermaid syntax simple (graph TD). No markdown blocks. Raw JSON only.`;
+            } else if (mode === 'code') {
+                systemPrompt = `You are an Expert AWS CDK Developer. 
+                Generate the COMPLETE, READY-TO-DEPLOY Python CDK code for this architecture.
+                RULES:
+                1. Include ALL imports (aws_cdk, constructs, specific aws services).
+                2. Define the Stack Class.
+                3. At the end, include the App instantiation: app = cdk.App(); MyStack(app, "MyStack"); app.synth()
+                4. Return ONLY raw Python code. No markdown blocks.`;
+            } else if (mode === 'cost') {
+                systemPrompt = `You are an AWS Solutions Architect. 
+                Analyze the provided JSON architecture. 
+                Estimate the monthly cost for 'Moderate Usage' (approx 1 Million requests/month, 50GB storage).
+                CRITICAL OUTPUT FORMAT: Return ONLY an HTML Table string using Tailwind classes (text-slate-300, border-slate-700). Add a Total row. No markdown.`;
+            } else if (mode === 'security') {
+                // --- SECURITY PROMPT ---
+                systemPrompt = `You are an AWS DevSecOps Engineer.
+                Analyze the provided AWS CDK Python code for security vulnerabilities.
+                Focus on:
+                1. IAM Policies (Look for '*' wildcards).
+                2. S3 Public Access & Encryption.
+                3. DynamoDB Encryption.
+                4. API Gateway Logging/Throttling.
+
+                CRITICAL OUTPUT FORMAT:
+                Return an HTML List using Tailwind classes.
+                - Use <ul class="space-y-2">
+                - For Issues: <li class="flex gap-2 text-red-400 items-start"><span class="text-xl">⚠️</span><span><strong>CRITICAL:</strong> ...message...</span></li>
+                - For Suggestions: <li class="flex gap-2 text-yellow-400 items-start"><span class="text-xl">💡</span><span><strong>SUGGESTION:</strong> ...message...</span></li>
+                - If safe: <li class="text-green-400 flex gap-2 items-center"><span class="text-xl">✅</span> No major vulnerabilities found.</li>`;
+            }
+
+            let url, body, headers;
+
+            if (platform === 'gemini') {
+                url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                headers = { 'Content-Type': 'application/json' };
+                body = JSON.stringify({
+                    contents: [{ parts: [{ text: systemPrompt + "\n\nUser Input: " + input }] }],
+                    generationConfig: {
+                        temperature: 0.2,
+                        maxOutputTokens: 8192,
+                        responseMimeType: isJson ? "application/json" : "text/plain"
+                    }
+                });
+            } else {
+                url = "https://openrouter.ai/api/v1/chat/completions";
+                headers = {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://serverless-agent.local",
+                    "X-Title": "Serverless Agent Local"
+                };
+                const payload = {
+                    model: model,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: input }
+                    ],
+                    temperature: 0.2,
+                    max_tokens: 4000
+                };
+                if (isJson) payload.response_format = { type: "json_object" };
+                body = JSON.stringify(payload);
+            }
+
+            const response = await fetch(url, { method: 'POST', headers: headers, body: body });
+            const data = await response.json();
+
+            if (data.error) {
+                if (data.error.message && data.error.message.includes("Provider returned error")) {
+                    throw new Error(`Model Busy. Switch to Google Gemini for stability.`);
+                }
+                throw new Error(data.error.message || JSON.stringify(data.error));
+            }
+
+            let text = platform === 'gemini' 
+                ? data.candidates?.[0]?.content?.parts?.[0]?.text 
+                : data.choices?.[0]?.message?.content;
+
+            if (!text) throw new Error("Empty response from AI.");
+            
+            if (isJson) {
+                text = text.replace(/```json|```/g, '').trim();
+                return JSON.parse(text);
+            } else {
+                text = text.replace(/```html|```python|```/g, '').trim();
+                return text;
+            }
+        }
+
+        async function renderDiagram(def) {
+            const el = document.getElementById('mermaidDiagram');
+            el.innerHTML = '<div class="text-indigo-400 text-sm animate-pulse">Rendering Visuals...</div>';
+            let cleanDef = def.replace(/```mermaid/g, '').replace(/```/g, '').trim();
+            if (!cleanDef.startsWith('graph')) cleanDef = 'graph TD\n' + cleanDef;
+            try {
+                const { svg } = await mermaid.render('graphDiv', cleanDef);
+                el.innerHTML = svg;
+            } catch (e) {
+                el.innerHTML = `<div class="text-slate-400 text-sm p-4 border border-slate-700 rounded bg-slate-800">Visual generation skipped (Complex Syntax). Code is still valid below.</div>`;
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('errorBox').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = msg;
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(document.getElementById('cdkCode').textContent);
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = originalText, 2000);
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
